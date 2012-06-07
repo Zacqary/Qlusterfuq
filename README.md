@@ -9,10 +9,10 @@ Eventually, we'll have a fancy install script that does all this for you. For no
 
 You'll need to go into the `db/set` folder and change the following:
 
--`admincontact` - Set this to an email address
--`daemon` - Set this to a no-reply email address
--`sitename` - Set this to the name of your site
--`systemroot` - Set this to the root URL of your Qlusterfuq site
+- `admincontact` - Set this to an email address
+- `daemon` - Set this to a no-reply email address
+- `sitename` - Set this to the name of your site
+- `systemroot` - Set this to the root URL of your Qlusterfuq site
 
 You can also edit `regdesc` and `regintro` to change what appears on the "Apply to Join" page.
 
