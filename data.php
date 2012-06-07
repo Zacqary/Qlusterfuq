@@ -1,11 +1,5 @@
 <?php
 require('auth.php');
-
-//Change this if you want to store the database outside of
-//the document root for extra security
-define(DB_ROOT,"");
-//////
-
 ///CONFIG///
 date_default_timezone_set(setting('timezone'));
 function theRoot(){
@@ -14,6 +8,10 @@ function theRoot(){
 function siteName(){
 	return setting('sitename');
 }
+//Change this if you want to store the database outside of
+//the document root for extra security
+$DB_ROOT = "";
+//////
 
 class User{
 	var $uid;
@@ -33,7 +31,7 @@ class User{
 		$this->birthday = userSetting($id,"birthday");
 		$this->basicinfo = userSetting($id,"basicinfo",true);
 		$this->website = userSetting($id,"website");
-		if (strpos($this->website,"://") === false) $this->website = "http://".$this->website;
+		if ( ($this->website)  && (strpos($this->website,"://") === false) ) $this->website = "http://".$this->website;
 	}
 }
 
@@ -59,7 +57,7 @@ function differentEvents($e1,$e2){
 
 //Lists all the users
 function theUsers(){
-	$dir = opendir(DB_ROOT.'db/u');
+	$dir = opendir($DB_ROOT.'db/u');
 	while($entryName = readdir($dir)) {
 		if(!is_dir($entryName)) $users[] = $entryName; //For some reason this removes . and ..
 	}
@@ -140,6 +138,11 @@ function clearUserSetting($id,$setting){
 	if (file_exists($file)) unlink(userPath($id)."/".$setting);
 }
 
+//Strips the private setting metacharacter
+function deprivate($text){
+	return strtr($text,array("{{{∵}}}"=>""));
+}
+
 //Handles private settings
 function settingAuth($input,$id){
 	$data = $input;
@@ -161,13 +164,13 @@ function settingAuth($input,$id){
 
 //Get a system setting
 function setting($i,$list=false){
-	if ($list) return datoflist(DB_ROOT.'db/set/'.$i);
-	return file_get_contents(DB_ROOT.'db/set/'.$i);
+	if ($list) return datoflist($DB_ROOT.'db/set/'.$i);
+	return file_get_contents($DB_ROOT.'db/set/'.$i);
 }
 
 //Set a system setting
 function setSetting($i, $change){
-	postThing(DB_ROOT.'db/set/'.$i,$change);
+	postThing($DB_ROOT.'db/set/'.$i,$change);
 }
 
 //Format a phone number
@@ -389,13 +392,13 @@ function hidePost($pid,$cid){
 }
 
 function postPath($i=0){
-	if ($i) return (DB_ROOT.'db/p/'.$i.'/');
-	else return (DB_ROOT.'db/p/');
+	if ($i) return ($DB_ROOT.'db/p/'.$i.'/');
+	else return ($DB_ROOT.'db/p/');
 }
 
 function userPath($i=0){
-	if ($i) return (DB_ROOT.'db/u/'.$i.'/');
-	else return (DB_ROOT.'db/u/');
+	if ($i) return ($DB_ROOT.'db/u/'.$i.'/');
+	else return ($DB_ROOT.'db/u/');
 }
 
 function getAuthor($post){
@@ -555,8 +558,8 @@ function unfollowPost($uid,$pid){
 }
 
 function tempPath($i=0){
-	if ($i) return (DB_ROOT.'db/temp/'.$i.'/');
-	else return (DB_ROOT.'db/temp/');
+	if ($i) return ($DB_ROOT.'db/temp/'.$i.'/');
+	else return ($DB_ROOT.'db/temp/');
 }
 
 function tempUserExists($id){

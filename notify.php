@@ -183,7 +183,7 @@ function listNotifications($uid,$start=0){
 
 function mailNotification($uid,$author,$type,$meta,$body,$link){
 	$user = new User($uid);
-	$to = $user->email;
+	$to = deprivate($user->email);
 	$subject = userSetting($author,"name")." ".substr($meta,0,-1)." at ".siteName();
 	$headers = "From: ".siteName()."<".setting("daemon").">\r\n" .
 	     "X-Mailer: php";

@@ -99,7 +99,7 @@ function applyToJoin($name,$email,$intro){
 	$admins = theAdmins();
 	foreach ($admins as $key => $val){
 			$user = new User($val);
-			$to = $user->email;
+			$to = deprivate($user->email);
 			$subject = $name." has applied for membership on ".setting("sitename");
 			$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
 			     "X-Mailer: php";

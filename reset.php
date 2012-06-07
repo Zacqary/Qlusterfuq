@@ -9,7 +9,7 @@ if (!$op) {
 		$token = md5($email.rand(123456789,987654321));
 		setUserSetting($uid,'reset-token',$token);
 		$user = new User($uid);
-		$to = $user->email;
+		$to = deprivate($user->email);
 		$subject = "Confirm your ".setting("sitename")." password reset";
 		$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
 		     "X-Mailer: php";
@@ -39,7 +39,7 @@ else{
 		$pass = substr($pass,0,12);
 		setUserSetting($uid,'hash',hashIt($pass));
 		$_SESSION['alert'] = "Your new password has been emailed to you.";
-		$to = $user->email;
+		$to = deprivate($user->email);
 		$subject = "Your ".setting("sitename")." password has been reset";
 		$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
 		     "X-Mailer: php";

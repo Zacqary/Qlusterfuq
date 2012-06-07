@@ -76,7 +76,7 @@ if ($mode == 'passchange'){
 		setUserSetting($uid,"hash",hashIt($newpass,$salt));
 		echo "Success";
 		$user = new User($uid);
-		$to = $user->email;
+		$to = deprivate($user->email);
 		$subject = "Your ".setting("sitename")." password was changed";
 		$headers = "From: ".setting("daemon")."\r\n" .
 		     "X-Mailer: php";
@@ -96,8 +96,8 @@ if ($mode == 'passchange'){
 
 
 function confirmEmail($uid,$email){
-	$to = strtr($email,array("{{{∵}}}"=>""));
-	if ($to == strtr(userSetting($uid,"email"),array("{{{∵}}}"=>""))) {
+	$to = deprivate($email)
+	if ($to == deprivate(userSetting($uid,"email"))) {
 		setUserSetting($uid,"email",$email);
 		return "No";
 	}
