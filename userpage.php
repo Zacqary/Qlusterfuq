@@ -790,8 +790,8 @@ else {
 							$('#edit-contact-info').attr('data-edit',"edit");
 							$('#edit-contact-info').html("<i class='icon-wrench icon-white'></i>");
 							$('#email').find('.rcol').html("<a href='mailto:<?php echo($pageuser->email)?>'><?php echo($pageuser->email)?></a>");
-							if (email != "<?php echo($pageuser->email)?>") {
-								$('#email').after("<div class='alert alert-info'><button class='close' data-dismiss='alert'>×</button>Check your inbox at "+email+" to confirm your new email address.");
+							if (data != "No") {
+								$('#email').after("<div class='alert alert-info'><button class='close' data-dismiss='alert'>×</button>Check your inbox at "+data+" to confirm your new email address.");
 							}
 							$('#phone').find('.rcol').html("<a href='tel:"+phone+"'>"+phone+"</a>");
 							if (phone) $('#phone').removeClass('noshow');

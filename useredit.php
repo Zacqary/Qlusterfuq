@@ -26,7 +26,7 @@ if ($mode == 'contactinfo'){
 	$website = $_POST["website"];
 	$phone = $_POST["phone"];
 	$externalsvcs = $_POST["externalsvcs"];
-	if ($email != userSetting($uid,'email')) confirmEmail($uid,$email);
+	if ($email != userSetting($uid,'email')) $doConfirm = confirmEmail($uid,$email);
 	if ($website) setUserSetting($uid,'website',$website);
 	else clearUserSetting($uid,'website');
 	if ($phone) setUserSetting($uid,'phone',$phone);
@@ -35,7 +35,7 @@ if ($mode == 'contactinfo'){
 		setUserSetting($uid,'externalsvcs',$externalsvcs);
 		validateExternals($uid);
 	}
-	
+	echo($doConfirm);
 }
 if ($mode == 'location'){
 	$location = $_POST["location"];
@@ -96,30 +96,36 @@ if ($mode == 'passchange'){
 
 
 function confirmEmail($uid,$email){
-	$token = md5($email.rand(123456789,987654321));
-	setUserSetting($uid,'newemail',$email);
-	setUserSetting($uid,'confirm-token',$token);
-	$user = new User($uid);
-	$to = $email;
-	$subject = "Confirm your new email address for ".setting("sitename");
-	$headers = "From: ".setting("daemon")."\r\n" .
-	     "X-Mailer: php";
-	ob_start(); //Turn on output buffering
-	?>
-Hi <?php echo $user->name ?>,
+	$to = strtr($email,array("{{{∵}}}"=>""));
+	if ($to == strtr(userSetting($uid,"email"),array("{{{∵}}}"=>""))) {
+		setUserSetting($uid,"email",$email);
+		return "No";
+	}
+	else {
+		$token = md5($email.rand(123456789,987654321));
+		setUserSetting($uid,'newemail',$email);
+		setUserSetting($uid,'confirm-token',$token);
+		$user = new User($uid);
+		$subject = "Confirm your new email address for ".setting("sitename");
+		$headers = "From: ".setting("daemon")."\r\n" .
+		     "X-Mailer: php";
+		ob_start(); //Turn on output buffering
+		?>
+	Hi <?php echo $user->name ?>,
 
-Looks like you're trying to change the email address you use for <?php echo(setting("sitename")) ?>.
-Please visit <?php echo(theRoot()) ?>/confirm/<?php echo($token) ?> to confirm this change.
+	Looks like you're trying to change the email address you use for <?php echo(setting("sitename")) ?>.
+	Please visit <?php echo(theRoot()) ?>/confirm/<?php echo($token) ?> to confirm this change.
 
-If you're not <?php echo $user->name ?> and you believe you've received this message in error, please
-feel free to ignore it.
-<?
-	//copy current buffer contents into $message variable and delete current output buffer
-	$message = ob_get_clean();
+	If you're not <?php echo $user->name ?> and you believe you've received this message in error, please
+	feel free to ignore it.
+	<?
+		//copy current buffer contents into $message variable and delete current output buffer
+		$message = ob_get_clean();
 	
 	
 		mail($to, $subject, $message, $headers);
-	
+		return $to;	
+	}
 }
 
 function validateExternals($uid){
