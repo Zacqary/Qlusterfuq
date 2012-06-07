@@ -1,0 +1,10 @@
+RewriteEngine on
+RewriteRule ^admin/?$ admin.php
+RewriteRule ^members/?$ listmembers.php
+RewriteRule ^register/?$ register.php
+RewriteRule ^confirm/([a-zA-Z0-9]+)/?$ confirm.php?t=$1 
+RewriteRule ^approve/([a-zA-Z0-9]+)/?$ approve.php?hash=$1 
+RewriteRule ^reset/([a-zA-Z0-9]+)/?$ reset.php?token=$1 
+RewriteRule ^post/([0-9]+)/?$ showpost.php?p=$1 
+RewriteRule ^upload/([^/]+)$ upload/$1
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ userpage.php?u=$1 [L]
