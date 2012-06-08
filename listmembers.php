@@ -9,9 +9,10 @@ include("header.php");?>
 	$rawusers = theUsers();
 	foreach ($rawusers as $key => $val){
 		$thisu = new User($val);
-		$users[$thisu->name] = $val;
-		ksort($users); 
+		$users[strtolower($thisu->name)] = $val;
+		
 	}
+	ksort($users);
 	foreach ($users as $key => $val){
 		$thisu = new User($val);
 		if($disp == 0) { ?><div class='row member-row'><?php } $disp++; ?>
