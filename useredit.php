@@ -96,7 +96,7 @@ if ($mode == 'passchange'){
 
 
 function confirmEmail($uid,$email){
-	$to = deprivate($email)
+	$to = deprivate($email);
 	if ($to == deprivate(userSetting($uid,"email"))) {
 		setUserSetting($uid,"email",$email);
 		return "No";
