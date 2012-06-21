@@ -2,7 +2,10 @@
 require 'data.php';
 $email = $_POST['email'];
 $pass = $_POST['pass'];
+session_start();
+$_SESSION['uid'] = "temp"; //Avoids private emails breaking the sytstem
 $uid = emailToUid($email);
+unset($_SESSION); session_destroy(); //Remove the temp ID
 if (!$uid) echo "I have never seen that email address in my <em>life</em>.";
 else if (passwordAuth($uid,$pass)){
 	session_start();

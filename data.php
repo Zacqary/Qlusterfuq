@@ -93,7 +93,7 @@ function emailToUid($email){
 	$thisuid = false;
 	foreach ($users as $key => $val){
 		$thisu = new User($val);
-		if(strtolower($thisu->email) == strtolower($email)) $thisuid = $thisu->uid;
+		if(strtolower(deprivate($thisu->email)) == strtolower($email)) $thisuid = $thisu->uid;
 	}
 	return $thisuid;
 }
