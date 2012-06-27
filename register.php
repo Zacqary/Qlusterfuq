@@ -97,6 +97,7 @@ else{
 function applyToJoin($name,$email,$intro){
 	$tid = applyUser($name,$email);
 	$admins = theAdmins();
+	if(!isset($admins)) $admins[] = setting("admincontact"); //If there are no admins, contact the email set as the administrative contact
 	foreach ($admins as $key => $val){
 			$user = new User($val);
 			$to = deprivate($user->email);
