@@ -3,7 +3,9 @@ include('functions.php');
 $op = $_GET['token'];
 if (!$op) {
 	$email = $_POST['email'];
+	$_SESSION['uid'] = "temp"; //Avoids private emails breaking the sytstem
 	$uid = emailToUid($email);
+	unset($_SESSION); session_destroy(); //Remove the temp ID
 	if (!$uid) echo "I have never seen that email address in my <em>life</em>.";
 	else{
 		$token = md5($email.rand(123456789,987654321));
