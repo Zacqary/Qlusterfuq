@@ -8,9 +8,10 @@ function theRoot(){
 function siteName(){
 	return setting('sitename');
 }
+//Change this if you want to store the database outside of
+//the document root for extra security
 function DB_ROOT(){
-	//Set this to the database root path
-	return "/home/username/sitename.com/";
+	return "/home/zacqaryps/longislandfurs.info/";
 }
 //////
 
@@ -199,14 +200,14 @@ function phone_number($Phone){
 
 //Make an array of notifications
 function openNotifications($uid){
-	$data = userSetting($uid,"notifications");
+	$data = explode("‽",userSetting($uid,"notifications"));
 	$array;
-	while(strpos($data,"‽")){
-		$gob = strstr($data,"‽",true);
-		$time = strstr($gob,"⁂",true);
-		$glob = strtr($gob,array($time."⁂" => ""));
-		$array[$time] = $glob;
-		$data = strtr($data,array($gob."‽" => ""));
+	foreach ($data as $key=>$val){
+		$time = explode("⁂",$val)[0];
+		if ($time){
+			$glob = strtr($val,array($time."⁂" => ""));
+			$array[$time] = $glob;
+		}
 	}
 	return $array;
 }
@@ -262,6 +263,10 @@ function destroy($dir) {
 //Make a page title
 function makeTitle($data){
 	return($data." « ");
+}
+
+function makeSubtitle($data){
+	return(" » ".$data);
 }
 
 //Display a link to a user's profile
@@ -378,8 +383,7 @@ function hideThing($file){
 function unhideThing($file){
 	$data = file_get_contents($file);
 	if (isDeleted($data)) {
-		$hidestring = strstr($data,"}",true)."}";
-		$data = strtr($data,array($hidestring => ""));
+		$data = explode("}",$data)[1];
 		postThing($file,$data);
 	}
 }

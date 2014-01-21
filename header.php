@@ -1,11 +1,12 @@
 <?php 
 $user = sessionAuth()?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo(setting("meta-language"))?>">
 <head>
 	<meta charset="UTF-8">
-	<meta name="description" content="Discussion board and social network for the Long Island furry community.">
-	<meta name="keywords" content="furries,furs,furry,anthro,long island,li-furs">
+	<meta name="description" content="<?php echo(setting("meta-description"))?>">
+	<meta name="keywords" content="<?php echo(setting("meta-keywords"))?>">
+	<meta name="language" content="<?php echo(setting("meta-language"))?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title><?php echo($title);echo(siteName());echo($subtitle)?></title>
 	<link rel="icon" type="image/gif" href="<?php echo(theRoot());?>/favicon.gif">
