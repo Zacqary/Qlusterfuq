@@ -7,7 +7,7 @@ This is the Qlusterfuq discussion group system. It's intended to be a simple, ea
 
 Eventually, we'll have a fancy install script that does all this for you. For now...
 
-1. Open `data.php` and set the `DB_ROOT` function to return the root path to your server. This should be an absolute path.
+1. Open `config.php` and set the `DB_ROOT` and `HOME_ROOT` functions to return the root path to your server. This should be an absolute path.
 
 2. You'll need to go into the `db/set` folder and change the following:
 
@@ -28,4 +28,4 @@ Eventually, we'll have a fancy install script that does all this for you. For no
 
 5. To create your first user, go to Apply to Join and go through the process. Your `admincontact` email will receive the join request. Approve it. To make this new user an administrator, go to the `db/u/(User's ID)` folder and create a file called `admin`. Make the text of this file `yes`.
 
-6. For security, chmod the folder permissions of `db` to 700. You can also move the `db` folder to a non-public location on your server. Just make sure to open up `data.php` and change the `DB_ROOT` function to reflect this new location.
+6. For security, chmod the folder permissions of `db` to 700. You can also move the `db` folder to a non-public location on your server. Just make sure to open up `config.php` and change the `DB_ROOT` function to reflect this new location.

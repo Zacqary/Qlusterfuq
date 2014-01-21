@@ -1,8 +1,9 @@
 #!/usr/local/bin/php -q
 <?php
 
-include("data.php");
-include("smtp-mailer.php");
+require_once("data.php");
+require("smtp-mailer.php");
+require_once("rss.php");
 
 //	Send queued emails
 $emails = countEmails();
@@ -21,4 +22,6 @@ if ($emails > 0){
 }
 else echo("no emails");
 
+//	Update feed
+	updateFeed();
 ?>

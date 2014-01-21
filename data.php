@@ -1,4 +1,5 @@
 <?php
+require('config.php');
 require('auth.php');
 ///CONFIG///
 date_default_timezone_set(setting('timezone'));
@@ -8,11 +9,7 @@ function theRoot(){
 function siteName(){
 	return setting('sitename');
 }
-//Change this if you want to store the database outside of
-//the document root for extra security
-function DB_ROOT(){
-	return "/home/zacqaryps/longislandfurs.info/";
-}
+
 //////
 
 class User{

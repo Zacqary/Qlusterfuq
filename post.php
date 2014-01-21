@@ -1,5 +1,6 @@
 <?php
-include('functions.php');
+require_once('functions.php');
+require_once('rss.php');
 $body = $_POST["body"];
 $user = $_POST["user"];
 $time = time();
@@ -11,5 +12,6 @@ if (editAuth($user)) {
 	$pid = postPost(0,$user,$time,$body,$event);
 	showPost($pid);
 	notifyNewPost($pid,$event);
+	updateFeed();
 }
 ?>

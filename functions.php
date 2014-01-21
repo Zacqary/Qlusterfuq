@@ -1,8 +1,8 @@
 <?php
-require('markdown.php');
-require('data.php');
-require('notify.php');
-require('smtp-mailer.php');
+require_once('markdown.php');
+require_once('data.php');
+require_once('notify.php');
+require_once('smtp-mailer.php');
 $functioning = true;
 
 function showComment($comment, $i, $commentCount,$ajax=0){

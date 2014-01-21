@@ -15,6 +15,7 @@ $user = sessionAuth()?>
 	<link rel="stylesheet" href="<?php echo(theRoot());?>/css/style.css">
 	<link rel="stylesheet" href="<?php echo(theRoot());?>/css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo(theRoot());?>/css/imgareaselect-default.css" />
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo(theRoot());?>/feed.rss" />
 	<link href='http://fonts.googleapis.com/css?family=Lato:700,700italic,400,400italic' rel='stylesheet' type='text/css'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 	<script src="<?php echo(theRoot());?>/js/jquery-ui.min.js" type="text/javascript"></script>
