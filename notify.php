@@ -83,6 +83,23 @@ function notifyNewPost($pid,$event=false){
 	}
 }
 
+function notifyNewUser($user,$intro, $pid, $timestamp){
+	$npost = array(1,3,5,7,9,11,13,15);
+	$users = theUsers();
+	$author = $user;
+	$body = $intro;
+	$meta = "joined ".setting("sitename").". Say hi!";
+	$type = "introduction";
+	foreach ($users as $key => $val){
+		if ($author != $val) {
+			addNotification($val,$timestamp,$author,$meta,"/post/".$pid);
+			if ( array_search(userSetting($val,'emailme'),$npost) ){
+				mailNotification($val,$author,$type,$meta,$body,theRoot()."/post/".$pid);
+			}
+		}
+	}
+}
+
 function notifyNewComment($pid,$cid){
 	$ncomment = array(2,3,6,7,10,11,14,15);
 	$users = theUsers();
@@ -184,14 +201,19 @@ function listNotifications($uid,$start=0){
 function mailNotification($uid,$author,$type,$meta,$body,$link){
 	$user = new User($uid);
 	$to = deprivate($user->email);
-	$subject = userSetting($author,"name")." ".substr($meta,0,-1)." at ".siteName();
-	$headers = "From: ".siteName()."<".setting("daemon").">\r\n" .
-	     "X-Mailer: php";
+	$to_name = $user->name;
+	if($type != 'introduction') {
+		$subject = userSetting($author,"name")." ".substr($meta,0,-1)." at ".siteName();
+	}
+	else {
+		$subject = userSetting($author,"name")." ".$meta;
+	}
+
 	ob_start(); //Turn on output buffering
 	?>
 Hi <?php echo $user->name ?>,
 
-<?php echo userSetting($author,"name")?> <?php echo substr($meta,0,-1)?> at <?php echo siteName()?>:
+<?php echo userSetting($author,"name")?> <?php if($type != 'introduction') { echo substr($meta,0,-1); ?> at <?php echo siteName(); }  else { echo $meta; }?>
 <?php if($body) {?>
 	
 ----
@@ -207,9 +229,10 @@ To stop receiving these emails, change your notification settings at <?php echo 
 <?
 	//copy current buffer contents into $message variable and delete current output buffer
 	$message = ob_get_clean();
-	
-	
-		mail($to, $subject, $message, $headers);
+		
+		if (setting("cronemail") == true)
+			queueEmail($to, $to_name, $subject, $message);
+		else QFSendEmail($to, $to_name, $subject, $message);
 	
 }
 

@@ -1,5 +1,5 @@
 
-	<div class='span3 sidebar hidden-phone'>
+	<div class='span3 sidebar'>
 		<div class='row box'>
 			<?php if(getLoggedInUser()){?>
 			<div class='span1 avatar48'>
@@ -9,14 +9,20 @@
 				<h4><?php echo($user->name);?></h4>
 				<p>View my profile page</p>
 			</div></a>
+			<div class='hidden-desktop hidden-tablet' style="margin-left: 72px; display:block; clear:both">
+				<a href="<?php echo(theRoot())?>/<?php echo($user->url)?>#control-panel"><i class="icon-cog"></i> Settings</a> ·
+				<a role="button" tabindex="0" href="<?php echo(theRoot())?>/logout.php"><i class="icon-off"></i> Log out</a>
+			</div>
 			<?php } else {?>
 			<div class='mebox-nolog'>
 			<h4>Welcome to <?php echo(siteName())?></h4>
-			<p><a role="button" tabindex="0" id="login" class='click' data-toggle="modal" href="#login-modal" >Log In</a> · <a id="register" href="<?php echo(theRoot())?>/register">Apply to Join</a></p>
+			<p><!--<a role="button" tabindex="0" id="login" class='click' data-toggle="modal" href="#login-modal" >--><a href="<?php echo(theRoot())?>/loginpage.php">Log In</a> · <a id="register" href="<?php echo(theRoot())?>/register">Apply to Join</a></p>
 			</div>
 			<?php } ?>
 		</div>
-		<div class='row box'>
+		<?php if($currentPage == "index") { ?>
+			<div class='row box'>
 			<?php upcomingEvents();?>
-		</div>
+			</div>
+		<?php } ?>
 	</div>

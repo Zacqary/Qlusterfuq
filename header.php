@@ -3,8 +3,12 @@ $user = sessionAuth()?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="UTF-8">
+	<meta name="description" content="Discussion board and social network for the Long Island furry community.">
+	<meta name="keywords" content="furries,furs,furry,anthro,long island,li-furs">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title><?php echo($title);echo(siteName());echo($subtitle)?></title>
+	<link rel="icon" type="image/gif" href="<?php echo(theRoot());?>/favicon.gif">
 	<link rel="stylesheet" href="<?php echo(theRoot());?>/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?php echo(theRoot());?>/css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="<?php echo(theRoot());?>/css/style.css">
@@ -24,7 +28,7 @@ $user = sessionAuth()?>
 	<script src="<?php echo(theRoot());?>/js/epiceditor.js"></script>
 </head>
 <body>
-	<div class="navbar navbar-fixed-top">
+	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="brand" href="<?php echo(theRoot())?>"><?php echo(siteName()) ?></a>
@@ -35,22 +39,21 @@ $user = sessionAuth()?>
 				</a>
 				<div class='nav-collapse hidden-desktop'>
 					<ul class="nav">
-					<?php if(getLoggedInUser()) { ?>
-						<li><a href="<?php echo(theRoot())?>/<?php echo($user->url)?>"><?php echo(getAvatar($user->uid,32));?> View my profile page </a></li>
-						<li><a href="<?php echo(theRoot())?>/<?php echo($user->url)?>#control-panel">Settings</a></li>
-						<li><a role="button" tabindex="0">Log out</a></li>
-					<?php } else {?>
-						<li><a href="<?php echo(theRoot())?>/register">Apply to Join</a></li>
-						<li><a role="button" tabindex="0" class='click' data-toggle="modal" href="#login-modal">Log In</a></li>
-					<?php } ?>	
+						<li <?php if($currentPage == "index") echo("class='active'") ?>><a href='<?php echo(theRoot())?>'>Home</a></li>
+						<li <?php if($currentPage == "members") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/members'>Member List</a></li>
+						<?php if (isAdmin(getLoggedInUser())) { ?>
+							<li <?php if($currentPage == "admin") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/admin'>Admin Panel</a></li>
+						<?php } ?>
+						<li><a href='mailto:<?php echo(setting('admincontact'))?>'>Contact Support</a></li>
 					</ul>
 				</div>
-				<ul class='nav pull-left'>
+				<ul class='nav pull-left visible-desktop'>
 					<li <?php if($currentPage == "index") echo("class='active'") ?>><a href='<?php echo(theRoot())?>'>Home</a></li>
 					<li <?php if($currentPage == "members") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/members'>Member List</a></li>
 					<?php if (isAdmin(getLoggedInUser())) { ?>
 						<li <?php if($currentPage == "admin") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/admin'>Admin Panel</a></li>
 					<?php } ?>
+					<li><a href='mailto:<?php echo(setting('admincontact'))?>'>Contact Support</a></li>
 				</ul>
 				<div class='hidden-phone hidden-tablet'>
 					<ul class='nav pull-right'>
@@ -79,7 +82,8 @@ $user = sessionAuth()?>
 						</li>
 						<?php } else {?>
 						<li <?php if($currentPage == "register") echo("class='active'") ?>><a href="<?php echo(theRoot())?>/register">Register</a></li>
-						<li><a role="button" tabindex="0" class='click' data-toggle="modal" href="#login-modal">Log In</a></li>
+						<li><!--<a role="button" tabindex="0" class='click' data-toggle="modal" href="#login-modal">Log In</a>-->
+							<a href="<?php echo(theRoot())?>/loginpage.php">Log In</a></li>
 						<?php } ?>
 					</ul>
 				</div>
@@ -95,8 +99,8 @@ $user = sessionAuth()?>
 						unset($_SESSION['alert'])?>
 					</div>
 				<?php } ?>
-				<?php if(!getLoggedInUser()){ ?>
-					<div class="modal fade" id="login-modal">
+				<?php if( (!getLoggedInUser()) && $currentPage != "loginpage"){ ?>
+					<!--<div class="modal fade" id="login-modal">
 				    		<div class="modal-header">
 						  	  <button class="close" data-dismiss="modal">×</button>
 							    <h3 id='login-header'>Log In</h3>
@@ -161,7 +165,7 @@ $user = sessionAuth()?>
 								url: theRoot+'reset.php',
 								data: dataString,
 								success: function(data){
-									if (data == "Password reset code sent. Check your email.") {$('#login-error').removeClass('alert-error');}
+	 								$('#login-error').removeClass('alert-error');
 									$('.loader').remove();
 									$('#login-error').fadeIn(100).fadeOut(100).fadeIn(100);
 									$('#login-error').html(data);
@@ -201,5 +205,5 @@ $user = sessionAuth()?>
 							});
 							return false;
 						});
-					</script>
+					</script>-->
 				<?php } ?>

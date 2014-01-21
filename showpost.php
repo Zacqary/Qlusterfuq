@@ -18,6 +18,7 @@ else {
 		}
 		$title = makeTitle($titletext);
 		include('header.php');?>
+			<div class="hidden-tablet hidden-desktop"><?php include('sidebar.php');?></div>
 			<div class="row">
 				<div class='span7 stream showpost'>
 				<?php showPost($p); ?>

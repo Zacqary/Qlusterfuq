@@ -5,6 +5,7 @@ if(!tempUserExists($hash)) include('404.php');
 else{
 	$name = tempUserSetting($hash,"name");
 	$email = tempUserSetting($hash,"email");
+	$intro = tempUserSetting($hash,"intro");
 	$uid = createUser();
 	setUserSetting($uid,'name',$name);
 	setUserSetting($uid,'email',$email);
@@ -18,11 +19,13 @@ else{
 	mkdir('av/'.$uid,0755);
 	removeTempUser($hash);
 	$_SESSION['alert'] = "User successfully approved!";
+	
+	postUserIntroduction($uid, $intro);
+	
 	$user = new User($uid);
 	$to = $user->email;
+	$name = $user->name;
 	$subject = "Your ".setting("sitename")." membership has been approved!";
-	$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
-	     "X-Mailer: php";
 	ob_start(); //Turn on output buffering
 	?>
 Hi <?php echo $user->name ?>,
@@ -46,7 +49,15 @@ Thanks for joining, and welcome to <?php echo(setting("sitename"))?>!
 <?
 	//copy current buffer contents into $message variable and delete current output buffer
 	$message = ob_get_clean();
-	mail($to, $subject, $message, $headers);
+	QFSendEmail($to, $name, $subject, $message);
 	header("Location: ".theRoot()."/".$uid);
 }
+
+function postUserIntroduction($user, $intro){
+	$time = time();
+	$body = "**has just joined ".setting("sitename")."**\n\n> ".$intro."\n\n";
+	$pid = postPost(0,$user,$time,$body);
+	notifyNewUser($user, $intro, $pid, $time);
+}
+
 ?>

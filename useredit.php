@@ -11,7 +11,10 @@ if ($mode == 'header'){
 	if ($name) setUserSetting($uid,'name',$name);
 	if ($altnames) setUserSetting($uid,'altnames',$altnames);
 	else clearUserSetting($uid,'altnames');
-	if ($bio) setUserSetting($uid,'bio',$bio);
+	if ($bio) {
+		$bio = str_replace("\n", "<br>",$bio);
+		setUserSetting($uid,'bio',$bio);
+	}
 	else clearUserSetting($uid,'bio');
 }
 if ($mode == 'basicinfo'){
@@ -26,7 +29,7 @@ if ($mode == 'contactinfo'){
 	$website = $_POST["website"];
 	$phone = $_POST["phone"];
 	$externalsvcs = $_POST["externalsvcs"];
-	if ($email != userSetting($uid,'email')) $doConfirm = confirmEmail($uid,$email);
+	$doConfirm = confirmEmail($uid,$email);
 	if ($website) setUserSetting($uid,'website',$website);
 	else clearUserSetting($uid,'website');
 	if ($phone) setUserSetting($uid,'phone',$phone);
@@ -77,9 +80,8 @@ if ($mode == 'passchange'){
 		echo "Success";
 		$user = new User($uid);
 		$to = deprivate($user->email);
+		$name = $user->name;
 		$subject = "Your ".setting("sitename")." password was changed";
-		$headers = "From: ".setting("daemon")."\r\n" .
-		     "X-Mailer: php";
 		ob_start(); //Turn on output buffering
 		?>
 	Hi <?php echo $user->name ?>,
@@ -89,7 +91,7 @@ if ($mode == 'passchange'){
 	<?
 		//copy current buffer contents into $message variable and delete current output buffer
 		$message = ob_get_clean();
-		mail($to, $subject, $message, $headers);
+		QFSendEmail($to, $name, $subject, $message);
 
 	}
 }
@@ -106,9 +108,9 @@ function confirmEmail($uid,$email){
 		setUserSetting($uid,'newemail',$email);
 		setUserSetting($uid,'confirm-token',$token);
 		$user = new User($uid);
+		$name = $user->name;
 		$subject = "Confirm your new email address for ".setting("sitename");
-		$headers = "From: ".setting("daemon")."\r\n" .
-		     "X-Mailer: php";
+		$headers = "From: ".siteName()."<".setting("daemon").">\r\n";$headers .= "Organization: Long Island Furs\r\n";$headers .= "MIME-Version: 1.0\r\n";$headers .= "Content-type: text/plain; charset=iso-8859-1\r\n";$headers .= "X-Priority: 3\r\n";
 		ob_start(); //Turn on output buffering
 		?>
 	Hi <?php echo $user->name ?>,
@@ -123,7 +125,7 @@ function confirmEmail($uid,$email){
 		$message = ob_get_clean();
 	
 	
-		mail($to, $subject, $message, $headers);
+		QFSendEmail($to, $name, $subject, $message);
 		return $to;	
 	}
 }

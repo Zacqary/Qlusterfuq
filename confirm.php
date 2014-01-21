@@ -12,7 +12,8 @@ else {
 	clearUserSetting($uid,'confirm-token');
 	$_SESSION['alert'] = "Success! Your email address is now on file as ".$newemail.".";
 	
-	$to = $email;
+	$to = deprivate($email);
+	$name = $user->name;
 	$subject = "Your ".setting("sitename")." email address was changed";
 	$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
 	     "X-Mailer: php";
@@ -25,7 +26,7 @@ not intend to do this, please contact the administrator at <?php echo(setting('a
 <?
 	//copy current buffer contents into $message variable and delete current output buffer
 	$message = ob_get_clean();
-	mail($to, $subject, $message, $headers);
+	QFSendEmail($to, $name, $subject, $message);
 	
 	header("Location: ".theRoot()."/".$user->url);
 }

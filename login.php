@@ -1,6 +1,6 @@
 <?php
 require 'data.php';
-$email = $_POST['email'];
+$email = deprivate($_POST['email']);
 $pass = $_POST['pass'];
 session_start();
 $_SESSION['uid'] = "temp"; //Avoids private emails breaking the sytstem

@@ -594,6 +594,7 @@ else {
 			$('#edit-headbox').click(function(){
 				if($('#edit-headbox').attr('data-edit') == "edit"){
 					$('#edit-headbox').button('toggle');
+					$('#edit-headbox').html("<i class='icon-white icon-ok-sign'></i>");
 					$('#edit-headbox').attr('data-edit',"save");
 					$('.userpage-name').hide();
 					$('.userpage-name').after("<input type='text' class='edit-userpage-name' value='"+name+"' maxlength='36'></input>");
@@ -643,6 +644,7 @@ else {
 				if($('#edit-basic-info').attr('data-edit') == "edit"){
 					$('.basic-info').find(".noshow").show();
 					$('#edit-basic-info').button('toggle');
+					$('#edit-basic-info').html("<i class='icon-white icon-ok-sign'></i>");
 					$('#edit-basic-info').attr('data-edit',"save");
 					var birthday = $('#birthday').find('.rcol').html();
 					$('#birthday').find('.rcol').html("<input type='text' class='edit-basic-info-field' value='"+birthday+"'/><a role='button' tabindex='0' class='lock' title='Click to make Members Only' rel='tooltip'></a>");
@@ -728,6 +730,7 @@ else {
 				if($('#edit-contact-info').attr('data-edit') == "edit"){
 					$('.contact-info').find(".noshow").show();
 					$('#edit-contact-info').button('toggle');
+					$('#edit-contact-info').html("<i class='icon-white icon-ok-sign'></i>");
 					$('#edit-contact-info').attr('data-edit',"save");
 					var email = $('#email').find('.rcol>a').html();
 					$('#email').find('.rcol').html("<input type='text' class='edit-basic-info-field' value='"+email+"'/><a role='button' tabindex='0' class='lock' title='Click to make Members Only' rel='tooltip'></a>");
@@ -790,7 +793,7 @@ else {
 							$('#edit-contact-info').attr('data-edit',"edit");
 							$('#edit-contact-info').html("<i class='icon-wrench icon-white'></i>");
 							$('#email').find('.rcol').html("<a href='mailto:<?php echo($pageuser->email)?>'><?php echo($pageuser->email)?></a>");
-							if (data != "No") {
+							if (data !== "No") {
 								$('#email').after("<div class='alert alert-info'><button class='close' data-dismiss='alert'>×</button>Check your inbox at "+data+" to confirm your new email address.");
 							}
 							$('#phone').find('.rcol').html("<a href='tel:"+phone+"'>"+phone+"</a>");
@@ -841,6 +844,7 @@ else {
 			$('#edit-location-box').click(function(){
 				if($('#edit-location-box').attr('data-edit') == "edit"){
 					$('#edit-location-box').button('toggle');
+					$('#edit-location-box').html("<i class='icon-white icon-ok-sign'></i>");
 					$('#edit-location-box').attr('data-edit',"save");
 					var zip = $('.zip').html();
 					$('.ziplabel').show();

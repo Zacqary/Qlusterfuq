@@ -1,8 +1,8 @@
 <?php
 require('markdown.php');
-require('config.php');
 require('data.php');
 require('notify.php');
+require('smtp-mailer.php');
 $functioning = true;
 
 function showComment($comment, $i, $commentCount,$ajax=0){
@@ -11,7 +11,8 @@ function showComment($comment, $i, $commentCount,$ajax=0){
 	/////////////////
 	echo ("
 		<div class='comment row row-".$i."-com-".$commentCount."'>
-			<div class='span1 avatar48'>".getAvatar($author->uid,48)."</div>
+			<div class='span1 avatar48 hidden-phone hidden-tablet'>".getAvatar($author->uid,48)."</div>
+			<div class='span1 avatar48 hidden-desktop'>".getAvatar($author->uid,32)."</div>
 			<div class='span5' id='".$i."-com-".$commentCount."'>
 				<span class='comment-author'>".authorName($author)."</span>
 				<div class='comment-body'>
@@ -91,13 +92,16 @@ function showPost($i, $stream=false){
 		//////////////////
 		echo ("<div class='row row-post-".$i."'>
 			<div class='span7 post'>");
+		$streamid = "";
+		if ($stream) $streamclass = " stream-post-body";
 		echo("
 				<div class='row'>
-				<div class='span1 avatar72'>".getAvatar($author->uid,72)."</div>
+				<div class='span1 avatar72 visible-desktop'>".getAvatar($author->uid,72)."</div>
+				<div class='span1 avatar72 hidden-desktop'>".getAvatar($author->uid,48)."</div>
 				<div class='span6' id='post-".$i."'>
 					<span class='post-author'>".authorName($author)."</span>");
 		echo($eventHTML."
-					<div class='post-body'>
+					<div class='post-body".$streamclass."'>
 						".$body."
 					</div>
 					<p class='post-meta' id='post-".$i."'>");
@@ -200,7 +204,7 @@ function showPostForm(){
 			<label for='date' class='up'>Date</label>
 			</div>
 			<div class='right-field'>
-			<input type='text' id='hour' name='hour' class='time-field' maxlength='2' value='12'></input> : <input type='text' name='minute' id='minute' class='time-field time-nudge' maxlength='2' value='00'></input> <select name='ampm' class='ampm' id='ampm'><option>am</option><option>pm</option></select>
+			<input type='text' id='hour' name='hour' class='time-field' maxlength='2' value='12'></input> : <input type='text' name='minute' id='minute' class='time-field time-nudge' maxlength='2' value='00'></input> <select name='ampm' class='ampm' id='ampm'><option>pm</option><option>am</option></select>
 			<label for='time' class='up'>Time</label>
 			</div>
 			<div class='rightmost-field'>
@@ -214,7 +218,7 @@ function showPostForm(){
 			<input type='submit' value='Post' id='submit-button' class='submit-button btn btn-primary btn-large'></input>
 			<input type='button' value='Preview' data-preview='preview' id='preview-button' class='submit-button btn btn-success btn-large'></input>
 			<input type='button' value='Cancel' id='cancel-button' class='submit-button btn btn-warning btn-large'></input>
-			<div id='text-toolbar'>
+			<div id='text-toolbar' class='hidden-phone'>
 				<button id='bold-button' class='button btn btn-inverse'><i class='icon-bold icon-white'></i></button>
 				<button id='italic-button' class='button btn btn-inverse'><i class='icon-italic icon-white'></i></button>
 				<button id='quote-button' class='button  btn btn-inverse'>Quote</button>

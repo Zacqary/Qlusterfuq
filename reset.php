@@ -11,10 +11,9 @@ if (!$op) {
 		$token = md5($email.rand(123456789,987654321));
 		setUserSetting($uid,'reset-token',$token);
 		$user = new User($uid);
+		$name = $user->name;
 		$to = deprivate($user->email);
 		$subject = "Confirm your ".setting("sitename")." password reset";
-		$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
-		     "X-Mailer: php";
 		ob_start(); //Turn on output buffering
 		?>
 Hi <?php echo $user->name ?>,
@@ -28,8 +27,9 @@ If you didn't request a password reset, ignore this email.
 	<?
 		//copy current buffer contents into $message variable and delete current output buffer
 		$message = ob_get_clean();
-		mail($to, $subject, $message, $headers);
+		QFSendEmail($to, $name, $subject, $message);
 		echo("Password reset code sent. Check your email.");
+
 	}
 }
 else{
@@ -42,9 +42,9 @@ else{
 		setUserSetting($uid,'hash',hashIt($pass));
 		$_SESSION['alert'] = "Your new password has been emailed to you.";
 		$to = deprivate($user->email);
+		$name = $user->name;
 		$subject = "Your ".setting("sitename")." password has been reset";
-		$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
-		     "X-Mailer: php";
+		
 		ob_start(); //Turn on output buffering
 		?>
 Hi <?php echo $user->name ?>,
@@ -64,7 +64,7 @@ After logging in, you can change your password by:
 	<?
 		//copy current buffer contents into $message variable and delete current output buffer
 		$message = ob_get_clean();
-		mail($to, $subject, $message, $headers);
+		QFSendEmail($to, $name, $subject, $message);
 		header("Location: ".theRoot()."/".$uid);
 	}
 }

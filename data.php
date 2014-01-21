@@ -8,9 +8,10 @@ function theRoot(){
 function siteName(){
 	return setting('sitename');
 }
-//Change this if you want to store the database outside of
-//the document root for extra security
-$DB_ROOT = "";
+function DB_ROOT(){
+	//Set this to the database root path
+	return "/home/username/sitename.com/";
+}
 //////
 
 class User{
@@ -57,7 +58,7 @@ function differentEvents($e1,$e2){
 
 //Lists all the users
 function theUsers(){
-	$dir = opendir($DB_ROOT.'db/u');
+	$dir = opendir(DB_ROOT().'db/u');
 	while($entryName = readdir($dir)) {
 		if(!is_dir($entryName)) $users[] = $entryName; //For some reason this removes . and ..
 	}
@@ -164,13 +165,13 @@ function settingAuth($input,$id){
 
 //Get a system setting
 function setting($i,$list=false){
-	if ($list) return datoflist($DB_ROOT.'db/set/'.$i);
-	return file_get_contents($DB_ROOT.'db/set/'.$i);
+	if ($list) return datoflist(DB_ROOT().'db/set/'.$i);
+	return file_get_contents(DB_ROOT().'db/set/'.$i);
 }
 
 //Set a system setting
 function setSetting($i, $change){
-	postThing($DB_ROOT.'db/set/'.$i,$change);
+	postThing(DB_ROOT().'db/set/'.$i,$change);
 }
 
 //Format a phone number
@@ -392,13 +393,13 @@ function hidePost($pid,$cid){
 }
 
 function postPath($i=0){
-	if ($i) return ($DB_ROOT.'db/p/'.$i.'/');
-	else return ($DB_ROOT.'db/p/');
+	if ($i) return (DB_ROOT().'db/p/'.$i.'/');
+	else return (DB_ROOT().'db/p/');
 }
 
 function userPath($i=0){
-	if ($i) return ($DB_ROOT.'db/u/'.$i.'/');
-	else return ($DB_ROOT.'db/u/');
+	if ($i) return (DB_ROOT().'db/u/'.$i.'/');
+	else return (DB_ROOT().'db/u/');
 }
 
 function getAuthor($post){
@@ -498,7 +499,7 @@ function getNotificationType($note){
 		$me = strtr($me,array("/post/"=>""));
 		if (!isDeleted(openPost($me))) return "post";
 	}
-	else if (strpos(getNotificationText($note),"ancelled the event")){
+	else if (strpos(getNotificationText($note),"cancelled the event")){
 		return "post";
 	}
 	else return false;
@@ -518,7 +519,7 @@ function commentExists($pid,$cid){
 }
 
 function userExists($u){
-	return file_exists(userPath($u));
+	return file_exists(userPath($u)."email");
 }
 
 function getFollowers($pid){
@@ -558,8 +559,8 @@ function unfollowPost($uid,$pid){
 }
 
 function tempPath($i=0){
-	if ($i) return ($DB_ROOT.'db/temp/'.$i.'/');
-	else return ($DB_ROOT.'db/temp/');
+	if ($i) return (DB_ROOT().'db/temp/'.$i.'/');
+	else return (DB_ROOT().'db/temp/');
 }
 
 function tempUserExists($id){
@@ -580,13 +581,55 @@ function removeTempUser($id){
 	rmdir(tempPath($id));
 }
 
-function applyUser($name,$email){
+function applyUser($name,$email, $intro){
 	$id = md5($email);
 	if (tempUserExists($id)) removeTempUser($id);
 	mkdir(tempPath().$id,0700);
 	setTempUserSetting($id,'name',$name);
 	setTempUserSetting($id,'email',$email);
+	setTempUserSetting($id,'intro',$intro);
 	return $id;
+}
+
+function emailPath() {
+	return (DB_ROOT().'db/e/');
+}
+function queueEmail($to, $name, $subject, $message){
+	$data = $to."•".$name."•".$subject."•".$message;
+	$eid = countEmails();
+	postThing(emailPath().$eid,$data);
+}
+
+function countEmails(){
+	$eid = 0;
+	while(1){
+		if (!file_exists(emailPath().$eid)) break; //If we've found a number that doesn't exist, break
+		$eid++;
+	}
+	return $eid;
+}
+
+function openEmail($eid){
+	return file_get_contents(emailPath().$eid);
+}
+function deleteEmail($eid){
+	unlink(emailPath().$eid);
+}
+function getEmailTo($e){
+	$data = explode("•",$e);
+	return $data[0];
+}
+function getEmailName($e){
+	$data = explode("•",$e);
+	return $data[1];
+}
+function getEmailSubject($e){
+	$data = explode("•",$e);
+	return $data[2];
+}
+function getEmailMessage($e){
+	$data = explode("•",$e);
+	return $data[3];
 }
 
 ?>

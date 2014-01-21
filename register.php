@@ -95,15 +95,13 @@ else{
 }
 
 function applyToJoin($name,$email,$intro){
-	$tid = applyUser($name,$email);
+	$tid = applyUser($name,$email, $intro);
 	$admins = theAdmins();
-	if(!isset($admins)) $admins[] = setting("admincontact"); //If there are no admins, contact the email set as the administrative contact
 	foreach ($admins as $key => $val){
 			$user = new User($val);
 			$to = deprivate($user->email);
+			$admname = $user->name;
 			$subject = $name." has applied for membership on ".setting("sitename");
-			$headers = "From: ".setting("sitename")."<".setting("daemon").">\r\n" .
-			     "X-Mailer: php";
 			ob_start(); //Turn on output buffering
 			?>
 		Hi <?php echo $user->name ?>,
@@ -120,7 +118,7 @@ function applyToJoin($name,$email,$intro){
 		<?
 			//copy current buffer contents into $message variable and delete current output buffer
 			$message = ob_get_clean();
-			mail($to, $subject, $message, $headers);
+			QFSendEmail($to, $admname, $subject, $message);
 	}
 }
 
