@@ -446,7 +446,9 @@ function showPostForm(){
 				});
 			});
 			$('#img-description').click(function(){
-				$('#img-description').val('');
+				if ($('#img-description').val() == 'Image description') {
+					$('#img-description').val('');
+				}
 			});
 			$('#img-description').blur(function(){
 				if ($('#img-description').val() == '') $('#img-description').val('Image description');
