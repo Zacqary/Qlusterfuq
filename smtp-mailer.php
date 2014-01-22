@@ -6,6 +6,7 @@ function QFSendEmail($to, $name, $subject, $message) {
 	$mail->SMTPAuth = true;
 	$mail->SMTPSecure = 'ssl';
 	$mail->Host = setting("mailhost");
+	$mail->Hostname = strtr(theRoot(),array("http://"=>"","www."=>""));
 	$mail->Username = setting("smtp-mailer");
 	$mail->Password = setting("smtp-password");
 	$mail->Port = setting("smtp-port");
