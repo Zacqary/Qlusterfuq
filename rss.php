@@ -21,7 +21,7 @@ function createFeed(){
 
 	$items = "";
 	$i = 0;
-	for ($i = $postCount; $i > 0; $i--){
+	for ($i = $postCount; $i > $postCount - setting("rsslimit"); $i--){
 		$event = null;
 		$body = null;
 		$author = null;
