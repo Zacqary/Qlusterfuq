@@ -21,12 +21,12 @@ function createFeed(){
 
 	$items = "";
 	$i = 0;
-	while ($i < 10){
+	for ($i = $postCount; $i > 0; $i--){
 		$event = null;
 		$body = null;
 		$author = null;
 		$post = null;
-		$pid = $postCount - $i;
+		$pid = $i;
 		if ($pid <= 0) break;
 		$post = openPost($pid);
 		if (!isDeleted($post)){
@@ -44,7 +44,7 @@ function createFeed(){
 					</ul>";
 				$eventHTML .= "<br><br>";
 			}
-			if (strlen(strip_tags($body)) <= 70) $titletext = ": ".$body;
+			if (strlen(strip_tags($body)) <= 70) $titletext = ": ".strip_tags($body);
 			else $titletext = ": ".substr(strip_tags($body), 0, 70)."...";
 			$titletext = strtr($titletext, array("\n" => " "));
 			if ($event != null) {
@@ -52,16 +52,19 @@ function createFeed(){
 				$body = $eventHTML.$body;
 			}
 	   
-			$title = userSetting($author,"name").$titletext;
-	   
+			$title = userSetting($author,"name").htmlspecialchars($titletext);
+	   		$title = str_replace(array('&', '<'), array('&#x26;', '&#x3C;'), $title);
+			
+			$body = htmlspecialchars($body);
+			
+			
 			$items .= "\t<item>\n";
 			$items .= "\t\t<title>".$title."</title>\n";
 			$items .= "\t\t<link>".theRoot()."/post/".$pid."</link>\n";
 			$items .= "\t\t<guid>".theRoot()."/post/".$pid."</guid>\n";
-			$items .= "\t\t<description>".htmlentities($body)."</description>\n";
+			$items .= "\t\t<description>".$body."</description>\n";
 			$items .= "\t</item>\n";
 			
-			$i++;
 		}  
 	}
 	
