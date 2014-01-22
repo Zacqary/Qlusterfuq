@@ -1,5 +1,6 @@
 <?php
-include('functions.php');
+require_once('functions.php');
+require_once('rss.php');
 $hash = $_GET['hash'];
 if(!tempUserExists($hash)) include('404.php');
 else{
@@ -19,6 +20,7 @@ else{
 	mkdir('av/'.$uid,0755);
 	removeTempUser($hash);
 	$_SESSION['alert'] = "User successfully approved!";
+	updateSiteMap();
 	
 	postUserIntroduction($uid, $intro);
 	

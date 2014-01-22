@@ -1,6 +1,7 @@
 RewriteEngine on
 RewriteRule ^admin/?$ admin.php
 RewriteRule ^members/?$ listmembers.php
+RewriteRule ^login/?$ loginpage.php
 RewriteRule ^register/?$ register.php
 RewriteRule ^confirm/([a-zA-Z0-9]+)/?$ confirm.php?t=$1 
 RewriteRule ^approve/([a-zA-Z0-9]+)/?$ approve.php?hash=$1 

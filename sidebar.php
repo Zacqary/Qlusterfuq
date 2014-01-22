@@ -16,7 +16,7 @@
 			<?php } else {?>
 			<div class='mebox-nolog'>
 			<h4>Welcome to <?php echo(siteName())?></h4>
-			<p><!--<a role="button" tabindex="0" id="login" class='click' data-toggle="modal" href="#login-modal" >--><a href="<?php echo(theRoot())?>/loginpage.php">Log In</a> · <a id="register" href="<?php echo(theRoot())?>/register">Apply to Join</a></p>
+			<p><!--<a role="button" tabindex="0" id="login" class='click' data-toggle="modal" href="#login-modal" >--><a href="<?php echo(theRoot())?>/login">Log In</a> · <a id="register" href="<?php echo(theRoot())?>/register">Apply to Join</a></p>
 			</div>
 			<?php } ?>
 		</div>

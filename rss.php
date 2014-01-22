@@ -75,4 +75,66 @@ function updateFeed(){
 	postThing(HOME_ROOT()."feed.rss",$feed);
 }
 
+function createUserMap(){
+	
+	$header = "<?xml version='1.0' encoding='UTF-8' ?>\n";
+	$header .= "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>\n";
+	$header .= "\n<channel>\n";
+	$header .= "\t<title>".setting('sitename')." Users</title>\n";
+	$header .= "\t<link>".setting('systemroot')."/members</link>\n";
+	$header .= "\t<atom:link href='".setting('systemroot')."/users.rss' rel='self' type='application/rss+xml' />";
+	$header .= "\t<description>".setting('meta-description')."</description>\n";
+	
+	$footer = "</channel>\n\n</rss>";
+	
+	$users = theUsers();
+	$urls = "";
+	foreach ($users as $key=>$val){
+		$myUrl = userSetting($val,"url");
+		$urls .= "<item>\n";
+		$urls .= "\t<title>".userSetting($val,"name")."</title>\n";
+		$urls .= "\t<link>".theRoot()."/".$myUrl."/</link>\n";
+		$urls .= "\t<guid>".theRoot()."/".$myUrl."/</guid>\n";
+		$urls .= "\t<description>".userSetting($val,"name")."'s profile page</description>\n";
+		$urls .= "</item>\n";
+	}
+	
+	return $header.$urls.$footer;
+}
+
+function updateSiteMap(){
+	$header = "<?xml version='1.0' encoding='UTF-8'?>\n<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd'>";
+	$footer = "</urlset>";
+	
+	$urls = "<url>\n";
+	$urls .= "\t<loc>".theRoot()."/</loc>\n";
+	$urls .= "\t<changefreq>always</changefreq>\n";
+	$urls .= "\t<priority>1.0</priority>\n";
+	$urls .= "</url>";
+	
+	$urls .= "<url>\n";
+	$urls .= "\t<loc>".theRoot()."/members</loc>\n";
+	$urls .= "\t<changefreq>never</changefreq>\n";
+	$urls .= "\t<priority>0.8</priority>\n";
+	$urls .= "</url>\n";
+	
+	$urls .= "<url>\n";
+	$urls .= "\t<loc>".theRoot()."/register</loc>\n";
+	$urls .= "\t<changefreq>never</changefreq>\n";
+	$urls .= "\t<priority>0.8</priority>\n";
+	$urls .= "</url>";
+	
+	$urls .= "<url>\n";
+	$urls .= "\t<loc>".theRoot()."/login</loc>\n";
+	$urls .= "\t<changefreq>never</changefreq>\n";
+	$urls .= "\t<priority>0.8</priority>\n";
+	$urls .= "</url>\n";
+	
+	$sitemap = $header.$urls.$footer;
+	
+	postThing(HOME_ROOT()."sitemap.xml",$sitemap);
+	
+	postThing(HOME_ROOT()."users.rss",createUserMap());
+}
+
 ?>

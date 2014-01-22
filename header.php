@@ -85,7 +85,7 @@ $user = sessionAuth()?>
 						<?php } else {?>
 						<li <?php if($currentPage == "register") echo("class='active'") ?>><a href="<?php echo(theRoot())?>/register">Register</a></li>
 						<li><!--<a role="button" tabindex="0" class='click' data-toggle="modal" href="#login-modal">Log In</a>-->
-							<a href="<?php echo(theRoot())?>/loginpage.php">Log In</a></li>
+							<a href="<?php echo(theRoot())?>/login">Log In</a></li>
 						<?php } ?>
 					</ul>
 				</div>
