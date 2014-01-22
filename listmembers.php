@@ -29,11 +29,12 @@ include("header.php");?>
 						echo($bio);
 						}?></p>
 				</div>
-			</div>
+			</div></a>
 		<?php if($disp == 2) { ?></div><?php $disp = 0; }
 	}
 	
 	?>
+</div>
 </div>
 
 <?php include("footer.php")?>
