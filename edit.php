@@ -40,20 +40,12 @@ else if ($op == 'up') { //Update a post
 	}
 	$user = getAuthor($post);
 	$time = getRawTimestamp($post);
-	if ( ($body != o($post)) || (strpos(o($post), "{{{∵}}}")) ){ //Make sure an edit has actually occurred, unless it's an event
-		$timestamp = "";//"<p class='edit-timestamp'>Last edited ".timestamp()."</p>"; //Create timestamp
-		$body .= "\n\n".$timestamp;	//Add timestamp
-		postPost($pid,$user,$time,$body,$event);
-		if (differentEvents($event,$prevevent)) notifyEditEvent($pid,$event);
-	}
+	postPost($pid,$user,$time,$body,$event);
+	if (differentEvents($event,$prevevent)) notifyEditEvent($pid,$event);
 	echo(parseMarkdown(strtr($body,array("{{{∵}}}"=>""))));
 }
 else if ($op == 'upc') { //Update a comment
-	if ($_POST["body"] != oc($comment)){ 
-		$timestamp = "";// "<p class='edit-timestamp'>Last edited ".timestamp()."</p>";
-		$data .= "\n\n".$timestamp;
-		postComment($pid,$cid,getAuthor($post),getRawTimestamp($post),$_POST["body"]);
-	}
+	postComment($pid,$cid,getAuthor($post),getRawTimestamp($post),$_POST["body"]);
 	echo(parseMarkdown($_POST["body"]));
 }
 else if ($op == 'd') { //Delete something
