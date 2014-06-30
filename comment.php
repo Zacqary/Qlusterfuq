@@ -11,6 +11,7 @@ if (editAuth($user)) {
 
 	//Post ID, new comment ID, user, time, comment body
 	postComment($_POST["pid"],$count,$user,time(),$_POST["body"]);
+	//unlink("cache/cached-index.html");
 	//Open the newly created comment and show it. The 1 signals that this is from an Ajax request.
 	showComment(openComment($_POST["pid"],$count),$_POST["pid"],$count,1);
 	notifyNewComment($_POST["pid"],$count);

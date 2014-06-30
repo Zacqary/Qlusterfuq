@@ -1,8 +1,10 @@
 <?php
-include("functions.php");
+require("functions.php");
 $title = makeTitle("Member List");
 $currentPage = "members";
-include("header.php");?>
+
+require("header.php");
+require("cache-top.php");?>
 <div class='span12 box'>
 	<?php
 	$disp = 0;
@@ -37,4 +39,6 @@ include("header.php");?>
 </div>
 </div>
 
-<?php include("footer.php")?>
+<?php require("footer.php");
+require('cache-bottom.php');
+?>

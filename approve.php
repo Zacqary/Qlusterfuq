@@ -21,12 +21,11 @@ else{
 	removeTempUser($hash);
 	$_SESSION['alert'] = "User successfully approved!";
 	updateSiteMap();
+	unlink("cache/cached-listmembers.html");
 	
 	postUserIntroduction($uid, $intro);
 	
 	$user = new User($uid);
-	$to = $user->email;
-	$name = $user->name;
 	$subject = "Your ".setting("sitename")." membership has been approved!";
 	ob_start(); //Turn on output buffering
 	?>
@@ -36,7 +35,7 @@ Your application to join <?php echo(setting("sitename"))?> has been approved!
 
 Go to <?php echo(theRoot())?> to log in with these credentials:
 ---
-Email: <?php echo($user->email."\n")?>
+Email: <?php echo($email."\n")?>
 Password: <?php echo($pass."\n")?>
 ---
 
@@ -51,7 +50,7 @@ Thanks for joining, and welcome to <?php echo(setting("sitename"))?>!
 <?
 	//copy current buffer contents into $message variable and delete current output buffer
 	$message = ob_get_clean();
-	QFSendEmail($to, $name, $subject, $message);
+	EmailUser($uid, $subject, $message);
 	header("Location: ".theRoot()."/".$uid);
 }
 
