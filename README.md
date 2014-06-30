@@ -24,8 +24,6 @@ Eventually, we'll have a fancy install script that does all this for you. For no
 - `smtp-password` - The password for the email address
 - `smtp-port` - The SMTP port
 
-4. For faster performance, set `cronemail` to "true" and then configure your server to run `cron.php` as often as possible. You may need to chmod `cron.php` to 744. If you don't do this, email notifications will be sent out during the process of posting, commenting, etc., which can delay AJAX and page loads for quite a while.
+4. To create your first user, go to Apply to Join and go through the process. Your `admincontact` email will receive the join request. Approve it. To make this new user an administrator, go to the `db/u/(User's ID)` folder and create a file called `admin`. Make the text of this file `yes`.
 
-5. To create your first user, go to Apply to Join and go through the process. Your `admincontact` email will receive the join request. Approve it. To make this new user an administrator, go to the `db/u/(User's ID)` folder and create a file called `admin`. Make the text of this file `yes`.
-
-6. For security, chmod the folder permissions of `db` to 700. You can also move the `db` folder to a non-public location on your server. Just make sure to open up `config.php` and change the `DB_ROOT` function to reflect this new location.
+5. For security, chmod the folder permissions of `db` to 700. You can also move the `db` folder to a non-public location on your server. Just make sure to open up `config.php` and change the `DB_ROOT` function to reflect this new location.
