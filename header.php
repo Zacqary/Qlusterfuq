@@ -42,6 +42,9 @@ $user = sessionAuth()?>
 				<div class='nav-collapse hidden-desktop'>
 					<ul class="nav">
 						<li <?php if($currentPage == "index") echo("class='active'") ?>><a href='<?php echo(theRoot())?>'>Home</a></li>
+						<?php if (pageExists("about")) { ?>
+							<li <?php if($currentPage == "about") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/about'>About</a></li>
+						<?php } ?>
 						<li <?php if($currentPage == "members") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/members'>Member List</a></li>
 						<?php if (isAdmin(getLoggedInUser())) { ?>
 							<li <?php if($currentPage == "admin") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/admin'>Admin Panel</a></li>
@@ -51,6 +54,9 @@ $user = sessionAuth()?>
 				</div>
 				<ul class='nav pull-left visible-desktop'>
 					<li <?php if($currentPage == "index") echo("class='active'") ?>><a href='<?php echo(theRoot())?>'>Home</a></li>
+					<?php if (pageExists("about")) { ?>
+						<li <?php if($currentPage == "about") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/about'>About</a></li>
+					<?php } ?>
 					<li <?php if($currentPage == "members") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/members'>Member List</a></li>
 					<?php if (isAdmin(getLoggedInUser())) { ?>
 						<li <?php if($currentPage == "admin") echo("class='active'") ?>><a href='<?php echo(theRoot())?>/admin'>Admin Panel</a></li>

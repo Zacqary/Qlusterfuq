@@ -1,7 +1,8 @@
 <?php
 include('functions.php');
 $u = urlToUid($_GET['u']);
-if(!userExists($u)) include('404.php');
+if (pageExists($_GET['u'])) include('page.php');
+else if(!userExists($u)) include('404.php');
 else {
 	$externalsvcs = setting("externalsvcs",true);
 	$basicinfo = setting("basicinfo",true);
