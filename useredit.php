@@ -5,9 +5,9 @@ $uid = $_POST["uid"];
 $mode = $_POST["mode"];
 if (!editAuth($uid)) $mode = false;
 if ($mode == 'header'){
-	$name = $_POST["name"];
-	$altnames = $_POST["altnames"];
-	$bio = $_POST["bio"];
+	$name = htmlspecialchars($_POST["name"]);
+	$altnames = htmlspecialchars($_POST["altnames"]);
+	$bio = htmlspecialchars($_POST["bio"]);
 	if ($name) setUserSetting($uid,'name',$name);
 	if ($altnames) setUserSetting($uid,'altnames',$altnames);
 	else clearUserSetting($uid,'altnames');
