@@ -177,6 +177,12 @@ function showCommentsForm($i){
 							$('#follow-".$i."').attr('data-follow','unfollow');
 							$('#follow-".$i."').attr('data-original-title','Stop getting notified about comments on this post');
 							$('.loader').remove();
+							$.ajax({
+								type: 'POST',
+								url: theRoot+'cron.php',
+								data: '',
+								success: function(data){ }
+							});
 						}
 					});
 					return false;
@@ -407,6 +413,12 @@ function showPostForm(){
 							$('#post-placeholder').show();
 							$('#post-form-wrapper').after(data);
 							$('.loader').remove();
+							$.ajax({
+								type: 'POST',
+								url: theRoot+'cron.php',
+								data: '',
+								success: function(data){ }
+							});
 						}
 					});
 					return false;
