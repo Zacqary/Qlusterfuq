@@ -2,7 +2,7 @@ var faders=0;
 
 $(document).ready(function () {
 	//Truncate posts
-	$('.post-body').each(function(){
+	$('.stream-post-body').each(function(){
 		if($(this).height() > 400) {
 			var edit = $(this).find('.edit-timestamp').outerHTML();
 			$(this).find('.edit-timestamp').remove();
@@ -122,7 +122,7 @@ $(window).hashchange( function(){
 			var metaform = "<span id='metaform'>Date: <input type='text' name='date' id='edit-datepicker' value='"+edate+"'></input>";
 			metaform += " · <span class='edit-time'>Time: <input type='text' id='hour' name='hour' class='edit-time-field' maxlength='2' value='"+ehour+"'></input>";
 			metaform += " : <input type='text' id='minute' name='minute' class='edit-time-field' maxlength='2' value='"+emin+"'></input>";
-			metaform += "<select name='ampm' class='edit-ampm' id='ampm' value='"+eampm+"'><option>am</option><option>pm</option></select></span>";
+			metaform += "<select name='ampm' class='edit-ampm' id='ampm' value='"+eampm+"'><option>pm</option><option>am</option></select></span>";
 			if (elocation != null) metaform += "<br><input type='text' name='location' id='edit-location' value='"+elocation+"'></input>";
 			else metaform += "<br><input type='text' name='location' id='edit-location' value=''></input>";
 			metaform += "</span>";
