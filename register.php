@@ -33,6 +33,7 @@ else{
 					<textarea id='intro'></textarea>
 					<label class='up'><?php echo(setting('regintro'))?></label>
 					<input type='submit' id='submit' class='btn btn-large btn-danger' value='Submit'/>
+					<p><div class='alert' id="warning"></div></p>
 					<p><div class='alert alert-error' id="error"></div></p>
 				</form>
 			</div>
@@ -46,6 +47,14 @@ else{
 			return (false);
 		}
 		$('#error').hide();
+		$('#warning').hide();
+		$('#email').on('input',function(){
+			var email = $('#email').val();
+			if (email.indexOf("@aol") > -1){
+				$('#warning').show();
+				$('#warning').html("AOL has very aggressive anti-spam policies and some emails may not get through. Use a different email address if possible.");
+			}
+		});
 		$('#submit').click(function(){
 			var name = $('#name').val();
 			if (name == "") {
@@ -99,8 +108,6 @@ function applyToJoin($name,$email,$intro){
 	$admins = theAdmins();
 	foreach ($admins as $key => $val){
 			$user = new User($val);
-			$to = deprivate($user->email);
-			$admname = $user->name;
 			$subject = $name." has applied for membership on ".setting("sitename");
 			ob_start(); //Turn on output buffering
 			?>
@@ -118,7 +125,7 @@ function applyToJoin($name,$email,$intro){
 		<?
 			//copy current buffer contents into $message variable and delete current output buffer
 			$message = ob_get_clean();
-			QFSendEmail($to, $admname, $subject, $message);
+			EmailUser($val, $subject, $message);
 	}
 }
 

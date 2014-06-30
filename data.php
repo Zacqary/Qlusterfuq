@@ -156,8 +156,9 @@ function settingAuth($input,$id){
 		if (!getLoggedInUser()) $data = false; //If nobody's logged in, don't show the setting
 		//Only remove the {{{∵}}} if the setting doesn't belong to the logged-in user
 		//The {{∵}}} is otherwise used to make the privacy setting editable
-		else if (getLoggedInUser() != $id) $data = strtr($data,array("{{{∵}}}"=>""));
+		else if (getLoggedInUser() != $id) $data = deprivate($data);
 	}
+	if ($data == "{{{∵}}}") return false;
 	return $data;
 }
 
@@ -350,6 +351,10 @@ function openPost($pid){
 	return file_get_contents(postPath($pid)."p");
 }
 
+function openPage($pid){
+	return file_get_contents(pagePath().$pid);
+}
+
 function postComment($pid, $cid, $user, $time, $body){
 	$data = $user."•".$time."•".$body;
 	postThing(postPath($pid).$cid,$data);
@@ -402,6 +407,21 @@ function userPath($i=0){
 	if ($i) return (DB_ROOT().'db/u/'.$i.'/');
 	else return (DB_ROOT().'db/u/');
 }
+
+function pagePath(){
+	return (DB_ROOT().'db/page/');
+}
+
+function getPageTitle($page){
+	$data = explode("•",$page);
+	return $data[0];
+}
+
+function getPageBody($page){
+	$data = explode("•",$page);
+	return $data[1];
+}
+
 
 function getAuthor($post){
 	$data = explode("•",$post);
@@ -523,6 +543,10 @@ function userExists($u){
 	return file_exists(userPath($u)."email");
 }
 
+function pageExists($p){
+	return file_exists(pagePath().$p);
+}
+
 function getFollowers($pid){
 	if (!file_exists(postPath($pid)."f")) return false; 
 	return datoflist(postPath($pid)."f");
@@ -599,6 +623,12 @@ function queueEmail($to, $name, $subject, $message){
 	$data = $to."•".$name."•".$subject."•".$message;
 	$eid = countEmails();
 	postThing(emailPath().$eid,$data);
+}
+
+function queueEmailToUser($uid, $subject, $message){
+	$to = deprivate( file_get_contents(userPath($uid)."email") );
+	$name = userSetting($uid, "name");
+	queueEmail($to, $name, $subject, $message);
 }
 
 function countEmails(){

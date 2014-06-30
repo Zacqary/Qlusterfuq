@@ -20,4 +20,10 @@ function QFSendEmail($to, $name, $subject, $message) {
 			return true;
 		}
 }
+
+function EmailUser($uid, $subject, $message){
+	$to = deprivate( file_get_contents(userPath($uid)."email") );
+	$name = userSetting($uid,'name');
+	return QFSendEmail($to, $name, $subject, $message);
+}
 ?>

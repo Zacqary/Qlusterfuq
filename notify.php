@@ -199,9 +199,8 @@ function listNotifications($uid,$start=0){
 }
 
 function mailNotification($uid,$author,$type,$meta,$body,$link){
-	$user = new User($uid);
-	$to = deprivate($user->email);
-	$to_name = $user->name;
+	$to = userSetting($uid, "email");
+	$to_name = userSetting($uid, "name");
 	if($type != 'introduction') {
 		$subject = userSetting($author,"name")." ".substr($meta,0,-1)." at ".siteName();
 	}
@@ -211,7 +210,7 @@ function mailNotification($uid,$author,$type,$meta,$body,$link){
 
 	ob_start(); //Turn on output buffering
 	?>
-Hi <?php echo $user->name ?>,
+Hi <?php echo $to_name ?>,
 
 <?php echo userSetting($author,"name")?> <?php if($type != 'introduction') { echo substr($meta,0,-1); ?> at <?php echo siteName(); }  else { echo $meta; }?>
 <?php if($body) {?>
@@ -231,8 +230,8 @@ To stop receiving these emails, change your notification settings at <?php echo 
 	$message = ob_get_clean();
 		
 		if (setting("cronemail") == true)
-			queueEmail($to, $to_name, $subject, $message);
-		else QFSendEmail($to, $to_name, $subject, $message);
+			queueEmailToUser($uid, $subject, $message);
+		else EmailUser($uid, $subject, $message);
 	
 }
 
