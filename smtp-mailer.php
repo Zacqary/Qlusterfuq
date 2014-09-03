@@ -1,5 +1,5 @@
 <?php
-include("Mailer.php");
+require("PHPMailer/class.phpmailer.php");
 function QFSendEmail($to, $name, $subject, $message) {
 	$mail = new PHPMailer_Mailer();
 	$mail->SMTPDebug = 0;  
@@ -19,6 +19,7 @@ function QFSendEmail($to, $name, $subject, $message) {
 		} else {
 			return true;
 		}
+	$mail = new PHPMailer(true);
 }
 
 function EmailUser($uid, $subject, $message){
