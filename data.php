@@ -1,6 +1,6 @@
 <?php
-require('config.php');
-require('auth.php');
+require_once('config.php');
+require_once('auth.php');
 ///CONFIG///
 date_default_timezone_set(setting('timezone'));
 function theRoot(){
@@ -232,10 +232,10 @@ function getAvatar($id,$size,$temp=0){
 	$path = "av/".$id."/avatar".$size;
 	$ext = ".png";
 	//Some stuff for the avatar upload form
-	if ($temp==2) return("<img class='avatar' src='".theRoot()."/".$path.$ext."?");
-	if($temp) return("<img class='avatar' src='".theRoot()."/".$path."temp".$ext."?");
+	if ($temp==2) return("<img class='avatar' rel='tooltip' title='".userSetting($id,"name")."' src='".theRoot()."/".$path.$ext."?");
+	if($temp) return("<img class='avatar' rel='tooltip' title='".userSetting($id,"name")."' src='".theRoot()."/".$path."temp".$ext."?");
 	//If the avatar's missing, return the default
-	if(!file_exists($path.$ext)) return("<img class='avatar' src='".theRoot()."/av/default/avatar".$size.$ext."'>");
+	if(!file_exists($path.$ext)) return("<img class='avatar' rel='tooltip' title='".userSetting($id,"name")."' src='".theRoot()."/av/default/avatar".$size.$ext."'>");
 	//Return the user's avatar
 	return("<img class='avatar' src='".theRoot()."/".$path.$ext."'>");
 }
@@ -279,7 +279,6 @@ function strip_tags_attributes($sSource, $aAllowedTags = array(), $aDisabledAttr
         return preg_replace('/<(.*?)>/ie', "'<' . preg_replace(array('/javascript:[^\"\']*/i', '/(" . implode('|', $aDisabledAttributes) . ")[ \\t\\n]*=[ \\t\\n]*[\"\'][^\"\']*[\"\']/i', '/\s+/'), array('', '', ' '), stripslashes('\\1')) . '>'", strip_tags($sSource, implode('', $aAllowedTags)));
     }
 
-function parseMarkdown($data){
 function parseMarkdown($data, $noheading=false){
 	//Make URLs clickable
 	$delimiters = '\\s"\\.\',';
@@ -324,6 +323,19 @@ function appendThing($file,$data){
 	$fh = fopen($file, 'a') or die("Error");
 	fwrite ($fh, $data);
 	fclose($fh);
+}
+
+function getAllPosts(){
+	$posts = [];
+	if ($handle = opendir('db/p')) {
+	    while (false !== ($entry = readdir($handle))) {
+	        if ($entry != "." && $entry != "..") {
+	            array_push($posts,$entry);
+	        }
+	    }
+	    closedir($handle);
+	}
+	return $posts;
 }
 
 function postPost($postid, $user, $time, $body, $event=null){

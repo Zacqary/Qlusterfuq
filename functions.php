@@ -604,27 +604,28 @@ function month($num){
 function upcomingEvents(){
 	$postCount = 1;
 	$events = array();
+	$now = (int)(date('Ymd')); //Get today's date as a raw number
 	while(1){
 		if (!postExists($postCount)) break;
 		if (!isDeleted(openPost($postCount))){
 			$event = openEvent($postCount);
 			if ($event){
 				$date = dateToNum($event->date);
-				$events[$date] = $event;
+				if ($date >= $now){ //Only show events that are in the future
+					$events[$date.uniqid()] = $event;
+				}
 			}
 		}
 		$postCount++;
 	}
-	$now = (int)(date('Ymd')); //Get today's date as a raw number
+	
 	ksort($events);
 	echo("<div class='event-list'>");
 	echo("<h3>Upcoming Events</h3>");
 	echo("<ul class='nav nav-pills nav-stacked'>");
 	foreach($events as $key=>$val){
-		if ($key >= $now){ //Only show events that are in the future
-			$date = month(substr($val->date,0,2))." ".substr($val->date,3,2);
-			echo("<li><a href='".theRoot()."/post/".$val->id."'><strong>".$val->name."</strong> ― ".$date."</a></li>");
-		}
+		$date = month(substr($val->date,0,2))." ".substr($val->date,3,2);
+		echo("<li><a href='".theRoot()."/post/".$val->id."'><strong>".$val->name."</strong> ― ".$date."</a></li>");
 	}
 	echo("</ul></div>");
 }
