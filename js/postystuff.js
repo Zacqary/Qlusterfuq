@@ -110,6 +110,8 @@ $(window).hashchange( function(){
 		var thread = $(thisPost+'>.comments').attr('id');
 		var img = $(thisPost).find('.image-share').outerHTML();
 		if ($(thisPost).find('.event-details').is(':visible')) {
+			$(thisPost).find('.event-attendees').hide();
+			
 			var ename = $(thisPost).find('.event-title').html();
 			var edate = $(thisPost).find('.event-date').html();
 			var etime = $(thisPost).find('.event-time').html();
@@ -181,6 +183,7 @@ $(window).hashchange( function(){
 			},
 		});
 		$('.cancel-button').click(function(){
+			$(thisPost).find('.event-attendees').show();
 			$(thisPost).find('#edit-event-title').replaceWith("<h3 class='event-title'>"+ename+"</h3>");
 			$(thisPost).find('.event-details>br').remove();
 			$(thisPost).find('#metaform').replaceWith(emeta);
@@ -210,6 +213,7 @@ $(window).hashchange( function(){
 				url: theRoot+"edit.php",
 				data: dataString,
 				success: function(data){
+					$(thisPost).find('.event-attendees').show();
 					$(thisPost+">#post-ed-"+thePost).remove();
 					$(thisPost+">.post-body").hide().html(data).fadeIn(500);
 					$(thisPost).find('#edit-event-title').replaceWith("<h3 class='event-title'>"+name+"</h3>");
@@ -309,6 +313,48 @@ $(window).hashchange( function(){
 			url: theRoot+"follow.php",
 			data: dataString,
 			success: function(data){
+				return false;
+			}
+		});
+		return false;
+	});
+	
+	//RSVP
+	$(document).on('click','.attend-click',function(){
+		var pid = $(this).attr('data-pid');
+		var uid = $(this).attr('data-uid');
+		var op;
+		if ($(this).hasClass("disabled")) return false;
+		if ($(this).attr('data-attend') == "attend"){
+			$("#rsvp-button-"+pid).html("I'm attending");
+			$("#attend-"+pid).addClass('disabled');
+			$("#ride-"+pid).removeClass('disabled');
+			$("#unattend-"+pid).removeClass('disabled');
+			op = "a";
+		}
+		else if ($(this).attr('data-attend') == "ride"){
+			$("#rsvp-button-"+pid).html("I need a ride");
+			$("#attend-"+pid).removeClass('disabled');
+			$("#ride-"+pid).addClass('disabled');
+			$("#unattend-"+pid).removeClass('disabled');
+			op = "r";
+		}
+		else if ($(this).attr('data-attend') == "unattend"){
+			$("#rsvp-button-"+pid).html("I'm not attending");
+			$("#attend-"+pid).removeClass('disabled');
+			$("#ride-"+pid).removeClass('disabled');
+			$("#unattend-"+pid).addClass('disabled');
+			op = "u";
+		}
+		var dataString = "op=" + op + "&uid=" + uid + "&pid=" + pid;
+		$.ajax({
+			type: "POST",
+			url: theRoot+"rsvp.php",
+			data: dataString,
+			success: function(data){
+				$("#attendee-list-"+pid).fadeOut(400, function() {
+					$(this).html(data).fadeIn(400)
+				});
 				return false;
 			}
 		});
