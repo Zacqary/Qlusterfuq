@@ -169,8 +169,8 @@ function showPost($i, $stream=false){
 					<p class='post-meta' id='post-".$i."'>");
 		if(editAuth($author->uid))echo("<a role='button' tabindex='0'class='edit-click click'><i class='icon-edit'></i> Edit</a> · <a role='button' tabindex='0'class='delete-click click'><i class='icon-trash'></i> Delete</a> · ");
 		if(getLoggedInUser()) {
-			if(!isFollowing(getLoggedInUser(),$i)) echo("<a role='button' tabindex='0'class='click follow-click' id='follow-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-follow='follow' rel='tooltip' title='Get notified about comments on this post'><i class='icon-star-empty'></i> Follow post</a> · ");
-			else echo("<a role='button' tabindex='0'class='click follow-click' id='follow-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-follow='unfollow' rel='tooltip' title='Stop getting notified about comments on this post'><i class='icon-star'></i> Unfollow post</a> · ");
+			if(!isFollowing(getLoggedInUser(),$i)) echo("<a role='button' tabindex='0' class='click follow-click' id='follow-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-follow='follow' rel='tooltip' title='Get notified about comments on this post'><i class='icon-star-empty'></i> Follow post</a> · ");
+			else echo("<a role='button' tabindex='0' class='click follow-click' id='follow-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-follow='unfollow' rel='tooltip' title='Stop getting notified about comments on this post'><i class='icon-star'></i> Unfollow post</a> · ");
 		}
 		echo("<a href='".theRoot()."/post/".$i."/' rel='tooltip' title='Link to this post'>Link</a> · ".makeTimelink($post,theRoot()."/post/".$i."/")."</p>");
 		showComments($i,$stream);
