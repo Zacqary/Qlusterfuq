@@ -280,12 +280,19 @@ function strip_tags_attributes($sSource, $aAllowedTags = array(), $aDisabledAttr
     }
 
 function parseMarkdown($data){
+function parseMarkdown($data, $noheading=false){
 	//Make URLs clickable
 	$delimiters = '\\s"\\.\',';
 	$schemes = 'https?|ftps?';
 	$pattern = sprintf('#(^|[%s])((?:%s)://\\S+[^%1$s])([%1$s]?)#i', $delimiters, $schemes);
 	$replacement = '$1<a href="$2">$2</a>$3';
 	$data = preg_replace($pattern, $replacement, $data);
+	
+	//Don't parse headings if $noheading is true
+	if ($noheading){
+		$data = strtr($data, array("#" => "\#"));
+	}
+	
 	//Parse Markdown and remove <h*> tags
 	$data = preg_replace('/<h[1-6](.*?)<\/h[1-6]>/si', '<p class="user-heading"$1</p>', Markdown($data));
 	$data = strip_tags_attributes($data,array("<p><a><span><strong><em><b><i><blockquote><img><code><ul><li><table><tr><td><hr>"));

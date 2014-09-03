@@ -7,7 +7,7 @@ $functioning = true;
 
 function showComment($comment, $i, $commentCount,$ajax=0){
 	$author = new User(getAuthor($comment)); //Get User name, picture, etc.
-	$body = parseMarkdown(getComment($comment)); //Get the comment text and parse the Markdown
+	$body = parseMarkdown(getComment($comment),true); //Get the comment text and parse the Markdown
 	/////////////////
 	echo ("
 		<div class='comment row row-".$i."-com-".$commentCount."'>
