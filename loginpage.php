@@ -57,6 +57,7 @@ if (!email) {
 	$('#login-error').html("You should probably type in an email address.");
 	return false;
 }
+$('.loader').remove();
 $('#reset-button').after("<img class='loader' src='<?php echo(theRoot())?>/img/ajax-loader.gif'>");
 $.ajax({
 	type: 'POST',
