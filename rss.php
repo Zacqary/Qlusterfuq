@@ -12,13 +12,8 @@ function createFeed(){
 	
 	$footer = "</channel>\n\n</rss>";
 	
-	$postCount = 1;
-	while(1){ //Count how many posts there are
-		if (!postExists($postCount)) break;
-		$postCount++;
-	}
-	$postCount--;
-
+	$posts = getAllPosts();
+	$postCount = sizeof($posts);
 	$items = "";
 	$i = 0;
 	for ($i = $postCount; $i > $postCount - setting("rsslimit"); $i--){
