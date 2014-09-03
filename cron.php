@@ -6,21 +6,32 @@ require("smtp-mailer.php");
 require_once("rss.php");
 
 //	Send queued emails
-$emails = countEmails();
-echo($emails);
-if ($emails > 0){
-	for ($i = 0; $i < $emails; $i++){
-		$e = openEmail($i);
-		$to = getEmailTo($e);
-		$name = getEmailName($e);
-		$subject = getEmailSubject($e);
-		$message = getEmailMessage($e);
-		if(QFSendEmail($to, $name, $subject, $message)){
-			deleteEmail($i);
-		}
-	}
+$emails = [];
+if ($handle = opendir('db/e')) {
+    while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != "..") {
+            array_push($emails,$entry);
+        }
+    }
+    closedir($handle);
 }
-else echo("no emails");
+
+$time_start = microtime(true);
+foreach ($emails as $val){
+	$e = openEmail($val);
+	$to = getEmailTo($e);
+	$name = getEmailName($e);
+	$subject = getEmailSubject($e);
+	$message = getEmailMessage($e);
+	if(QFSendEmail($to, $name, $subject, $message)){
+		deleteEmail($val);
+	}
+	
+	// Stop sending emails after 5 seconds and try again later
+	$time_end = microtime(true);
+	$time = $time_end - $time_start;
+	if ($time >= 5) break;
+}
 
 //	Update feed
 	updateFeed();
