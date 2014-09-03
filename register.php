@@ -11,7 +11,7 @@ if ($op == "process"){
 	}
 	else{
 		applyToJoin($name,$email,$intro);
-		echo("Okay! Your application has been sent. Once you're approved, you'll receive a password to log in with.");
+		echo("Okay! Your application has been sent. Please check your email for a confirmation (it may be in your spam or junk folder). Once you're approved, you'll be emailed a password to log in with.");
 	}
 }
 else{
@@ -127,6 +127,20 @@ function applyToJoin($name,$email,$intro){
 			$message = ob_get_clean();
 			EmailUser($val, $subject, $message);
 	}
+	
+	$confirmSubject = "Your ".setting("sitename")." membership is pending";
+	ob_start(); //Turn on output buffering
+	?>
+	Hi <?php echo($name)?>,
+	
+	Thanks for applying to join <?php echo(setting("sitename"))?>! The administrators will review your application as soon as possible.
+	
+	If you don't receive your approval soon, please email <?php echo(setting("admincontact"))?> for assistance.
+	
+	If you didn't apply to join <?php echo(setting("sitename"))?>, please disregard this message.
+	<?
+	$confirmMessage = ob_get_clean();
+	QFSendEmail($email, $name, $confirmSubject, $confirmMessage);
 }
 
 ?>
