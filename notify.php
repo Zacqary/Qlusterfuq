@@ -1,5 +1,5 @@
 <?php
-
+require_once('data.php');
 function notifyEditEvent($pid,$event){
 	$nevent = array(8,9,10,11,12,13,14,15);
 	$users = theUsers();
@@ -19,7 +19,7 @@ function notifyEditEvent($pid,$event){
 				mailNotification($val,$author,$type,$meta,$body,theRoot()."/post/".$pid);
 			}
 		}
-	}
+	}	
 }
 
 function notifyCancelEvent($pid,$author){
@@ -140,6 +140,17 @@ function notifyNewComment($pid,$cid){
 	}
 }
 
+function notifyNewRSVP($pid,$uid,$ride=false){
+	$post = openPost($pid);
+	$postauthor = getAuthor($post);
+	$timestamp = time();
+	$event = openEvent($pid);
+	$text = "is attending your event ".$event->name;
+	if ($ride) $text = "needs a ride to your event ".$event->name;
+	
+	addNotification($postauthor,$timestamp,$uid,$text,"/post/".$pid);
+}
+
 function listNotifications($uid,$start=0){
 	$notes = openNotifications($uid);
 	krsort($notes);
@@ -199,6 +210,10 @@ function listNotifications($uid,$start=0){
 }
 
 function mailNotification($uid,$author,$type,$meta,$body,$link){
+	if (!userSetting($uid,"unsub-token")){
+		$token = md5($email.rand(123456789,987654321));
+		setUserSetting($uid,"unsub-token",$token);
+	}
 	$to = userSetting($uid, "email");
 	$to_name = userSetting($uid, "name");
 	if($type != 'introduction') {
@@ -224,7 +239,9 @@ Hi <?php echo $to_name ?>,
 	
 You can view or respond to the <?php echo $type?><?php if($type == "comment") {?>, or unfollow the post to stop receiving notifications about it,<?php }?> at <?php echo $link?><?php }?>
 
-To stop receiving these emails, change your notification settings at <?php echo (theRoot()."/".$user->url."#control-panel")?>
+To unsubscribe from these emails, you can:
+- Change your notification settings at <?php echo (theRoot()."/".$user->url."#control-panel")?> 
+- Unsubscribe from ALL <?php echo siteName()?> emails immediately by going to <?php echo (theRoot()."/unsubscribe/".userSetting($uid,"unsub-token"))?>
 <?
 	//copy current buffer contents into $message variable and delete current output buffer
 	$message = ob_get_clean();
