@@ -1,25 +1,30 @@
 <?php
 require("PHPMailer/class.phpmailer.php");
+require_once("log.php");
+require_once("data.php");
+
 function QFSendEmail($to, $name, $subject, $message) {
-	$mail = new PHPMailer_Mailer();
-	$mail->SMTPDebug = 0;  
-	$mail->SMTPAuth = true;
-	$mail->SMTPSecure = 'ssl';
-	$mail->Host = setting("mailhost");
-	$mail->Hostname = strtr(theRoot(),array("http://"=>"","www."=>""));
-	$mail->Username = setting("smtp-mailer");
-	$mail->Password = setting("smtp-password");
-	$mail->Port = setting("smtp-port");
-	$mail->AddAddress($to, $name);
-	$mail->SetFrom( setting("daemon"), siteName() );
-	$mail->Subject = $subject;
-	$mail->Body = html_entity_decode($message);
-	if(!$mail->Send()) {
-			return false;
-		} else {
-			return true;
-		}
 	$mail = new PHPMailer(true);
+	try {
+		$mail->DKIM_domain = setting("dkim-domain");
+		$mail->DKIM_private = setting("dkim-private");
+		$mail->DKIM_selector = setting("dkim-selector");
+		$mail->AddAddress($to, $name);
+		$mail->SetFrom( setting("daemon"), siteName() );
+		$mail->Subject = $subject;
+		$mail->Body = html_entity_decode($message);
+		$mail->Send();
+		addLog("email", "Message successfully sent to ".$name." <".$to.">: '".$subject."'");
+		return true;
+	}
+	catch (phpmailerException $e){
+		addLog("email",$e->errorMessage());
+		return false;
+	}
+	catch (Exception $e){
+		addLog("email",$e->getMessage());
+		return false;
+	}
 }
 
 function EmailUser($uid, $subject, $message){
