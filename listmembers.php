@@ -11,7 +11,7 @@ require("cache-top.php");?>
 	$rawusers = theUsers();
 	foreach ($rawusers as $key => $val){
 		$thisu = new User($val);
-		$users[strtolower($thisu->name)] = $val;
+		$users[strtolower($thisu->name).uniqid()] = $val;
 		
 	}
 	ksort($users);
@@ -34,11 +34,14 @@ require("cache-top.php");?>
 			</div></a>
 		<?php if($disp == 2) { ?></div><?php $disp = 0; }
 	}
-	
 	?>
+
 </div>
 </div>
 
-<?php require("footer.php");
+<?php 
+require("footer.php");
 require('cache-bottom.php');
+
+
 ?>
