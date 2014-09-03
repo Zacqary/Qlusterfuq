@@ -1,4 +1,5 @@
 <?php 
+$start_time = microtime(true);
 $user = sessionAuth()?>
 <!DOCTYPE html>
 <html lang="<?php echo(setting("meta-language"))?>">

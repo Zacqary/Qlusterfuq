@@ -9,3 +9,6 @@
 	</div><!--.container-->
 </body>
 </html>
+<?php $end_time = microtime(true);
+$exec_time = $end_time - $start_time;?>
+<!-- Script execution time: <?php echo $exec_time?> -->
