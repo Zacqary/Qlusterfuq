@@ -88,6 +88,68 @@ function showPost($i, $stream=false){
 				else $eventHTML .= "<br>".$event->location;
 			}
 			$eventHTML .= "</div>";
+			if (dateToNum($event->date) >= (int)(date('Ymd'))){
+				$eventHTML .= "<div class='event-attendees'>";
+					$eventHTML .= "<span class='attendee-list' id='attendee-list-".$i."'>";
+					$attendeeList = getAttendees($i);
+					$attendees = [];
+					$rides = [];
+					if ($attendeeList) {
+						foreach ($attendeeList as $key => $val){
+							if (userExists($key)) {
+								if ($val == "ride") array_push($rides, $key);
+								else array_push($attendees, $key);
+							}
+						}
+						if (sizeof($attendees) ) {	
+							$eventHTML .= "<h4>Attending:</h4>";
+							foreach ($attendees as $key => $val){
+								$eventHTML .= "<a title='".userSetting($val,"name")."' rel='tooltip' href='".userSetting($val,"url")."'>";
+								$eventHTML .= getAvatar($val,32);
+								$eventHTML .= "</a>";
+							}
+						}
+						if (sizeof($rides) ) {	
+							$eventHTML .= "<h4>Needs a Ride:</h4>";
+							foreach ($rides as $key => $val){
+								$eventHTML .= "<a title='".userSetting($val,"name")."' rel='tooltip' href='".userSetting($val,"url")."'>";
+								$eventHTML .= getAvatar($val,32);
+								$eventHTML .= "</a>";
+							}
+						}
+					}
+					$eventHTML .= "</span>";
+					
+					if (getLoggedInUser()) {
+						$RSVPtext = "RSVP";
+						$isAttending = isAttending(getLoggedInUser(),$i);
+						if ($isAttending) {
+							if ($isAttending == "ride") {
+								$RSVPtext = "I need a ride";
+								$rideDisabled = " disabled";
+							}
+							else {
+								$RSVPtext = "I'm attending";
+								$attendDisabled = " disabled";
+							}
+						} 
+						else {
+							$notAttendDisabled = " disabled";
+						}
+						$eventHTML .= "
+							<div class='btn-group rsvp-btn'>
+								<a class='btn btn-primary dropdown-toggle' data-toggle='dropdown' role='button'><span id='rsvp-button-".$i."'>".$RSVPtext."</span> <span class='caret'></a>
+								<ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenu'>
+									<li><a tabindex='-1' role='button' class='click attend-click".$attendDisabled."' id='attend-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-attend='attend'>I'm attending</a></li>
+									<li><a tabindex='-1' role='button' class='click attend-click".$rideDisabled."' id='ride-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-attend='ride'>I need a ride</a></li>
+									<li class='divider'></li>
+									<li><a tabindex='-1' role='button' class='click attend-click".$notAttendDisabled."' id='unattend-".$i."' data-uid='".getLoggedInUser()."' data-pid='".$i."' data-attend='unattend'>I'm not attending</a></li>
+								</ul>
+							</div>";
+					}
+				$eventHTML .= "</div>";
+			}
+			
 		}
 		//////////////////
 		echo ("<div class='row row-post-".$i."'>

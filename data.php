@@ -583,6 +583,56 @@ function unfollowPost($uid,$pid){
 	postThing(postPath($pid)."f",$data);
 }
 
+function getAttendees($pid){
+	if (!file_exists(postPath($pid)."att")) return false; 
+	return datoflist(postPath($pid)."att");
+}
+
+function isAttending($uid,$pid){
+	$attendees = getAttendees($pid);
+	if(!$attendees) return false;
+	return $attendees[$uid];
+}
+
+function attendEvent($uid,$pid,$ride=false){
+	$att = isAttending($uid,$pid);
+	$return = "new";
+	
+	if($att) {
+		if ( ($ride) && ($att == "ride") ) return false;
+		else if ( (!$ride) && ($att == "attending") ) return false;
+		else $return = "old";
+	}
+	$attendees = getAttendees($pid);
+	$data;
+	if(is_array($attendees)) {
+		foreach($attendees as $key => $val){
+			if ($key != $uid)
+				$data .= $key.",".$val."\n";
+		}
+	}
+	$entry = "attending";
+	if ($ride) $entry = "ride"; 
+	
+	$data .= $uid.",".$entry."\n";
+	postThing(postPath($pid)."att",$data);
+	return $return;
+}
+
+function unattendEvent($uid,$pid){
+	if(!isAttending($uid,$pid)) return false;
+	$attendees = getAttendees($pid);
+	$data;
+	if(is_array($attendees)) {
+		foreach($attendees as $key => $val){
+			if($key != $uid) $data .= $key.",".$val."\n";
+		}
+	}
+	postThing(postPath($pid)."att",$data);
+	return true;
+}
+
+
 function tempPath($i=0){
 	if ($i) return (DB_ROOT().'db/temp/'.$i.'/');
 	else return (DB_ROOT().'db/temp/');
