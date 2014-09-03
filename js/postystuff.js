@@ -1,4 +1,5 @@
 var faders=0;
+var editEditor = null;
 
 $(document).ready(function () {
 	//Truncate posts
@@ -166,20 +167,20 @@ $(window).hashchange( function(){
 				$(thisPost+">.post-body").prepend(img);
 				$(thisPost+">#post-ed-"+thePost).hide();
 				element = document.getElementById('post-ed-'+thePost);
-				var editor = new EpicEditor(element).options({
+				editEditor = new EpicEditor(element).options({
 					file:{
 					    name:'PostFormEd'+thePost,
 					    defaultContent:data
 					  }
 				}).load();
 				$(thisPost+">.post-body").find("#post-form-body-"+thePost).hide();
-				editor.on('save',function(){
-					var text = editor.get('editor').value;
+				editEditor.on('save',function(){
+					var text = editEditor.get('editor').value;
 					$('#post-form-body-'+thePost).val(text);
 				}); 
-				editor.save();
+				editEditor.save();
 				$(thisPost+">#post-ed-"+thePost).show();
-				editor.focus();
+				editEditor.focus();
 			},
 		});
 		$('.cancel-button').click(function(){
@@ -192,11 +193,11 @@ $(window).hashchange( function(){
 			$(thisPost+">.edit-buttons").remove();
 			$(thisPost+">.edit-click").show();
 			$(thisPost+">br").remove();
-			editor.remove('PostFormEd'+thePost);
+			editEditor.remove('PostFormEd'+thePost);
 			$(thisPost).unwrap();
 		});
 		$('.save-button').click(function(){
-			editor.remove('PostFormEd'+thePost);
+			editEditor.remove('PostFormEd'+thePost);
 			var body = $('#post-form-body-'+thePost).val();
 			var name = $(thisPost).find('#edit-event-title').val();
 			var date = $(thisPost).find('#edit-datepicker').val();
@@ -223,7 +224,7 @@ $(window).hashchange( function(){
 					$(thisPost+">.edit-click").show();
 					$(thisPost+">br").remove();
 					$('.loader').remove();
-					editor.remove('PostFormEd'+thePost);
+					editEditor.remove('PostFormEd'+thePost);
 					$(thisPost).unwrap();
 				}
 			});
